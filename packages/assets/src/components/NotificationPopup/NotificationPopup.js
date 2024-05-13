@@ -1,14 +1,23 @@
-import React from 'react';
 import './NoticationPopup.scss';
+import '@shopify/polaris/build/esm/styles.css';
 
+import {Icon, Text, TextContainer, Tooltip} from '@shopify/polaris';
+
+import {CheckIcon} from '@shopify/polaris-icons';
+import React from 'react';
+import timestampToDate from '@assets/helpers/utils/timestampToDate';
 const NotificationPopup = ({
-  firstName = 'John Doe',
-  city = 'New York',
-  country = 'United States',
-  productName = 'Puffer Jacket With Hidden Hood',
-  timestamp = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg'
+  firstName,
+  city,
+  productName,
+  country,
+  productId,
+  timestamp,
+  productImage,
+  time
 }) => {
+  const date = timestampToDate(timestamp);
+
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
       <div className="Avava-SP__Inner">
@@ -26,15 +35,24 @@ const NotificationPopup = ({
               </div>
               <div className={'Avada-SP__Subtitle'}>purchased {productName}</div>
               <div className={'Avada-SP__Footer'}>
-                {timestamp}{' '}
+                {time}{' '}
                 <span className="uni-blue">
-                  <i className="fa fa-check" aria-hidden="true" /> by Avada
+                  <i>
+                    <Icon source={CheckIcon} tone="info" />
+                  </i>
+                  by Avada
                 </span>
               </div>
             </div>
           </a>
+          <div className="close-btn">
+            <Tooltip content="Delete notification">
+              <TextContainer>x</TextContainer>
+            </Tooltip>
+          </div>
         </div>
       </div>
+      <div>{date !== 'Invalid Date' ? date : ''}</div>
     </div>
   );
 };

@@ -1,12 +1,19 @@
-import App from 'koa';
 import 'isomorphic-fetch';
+
 import {contentSecurityPolicy, shopifyAuth} from '@avada/core';
-import shopifyConfig from '@functions/config/shopify';
-import render from 'koa-ejs';
-import path from 'path';
-import createErrorHandler from '@functions/middleware/errorHandler';
-import firebase from 'firebase-admin';
+import {deleteWebhooks, getWebhooks, registerWebhook} from '@functions/services/webhookService';
+
+import App from 'koa';
+import {addSetting} from '@functions/repositories/settingsRepository';
 import appConfig from '@functions/config/app';
+import createErrorHandler from '@functions/middleware/errorHandler';
+import defaultSettings from '@functions/const/defaultSettings';
+import firebase from 'firebase-admin';
+import {getShopByShopifyDomain} from '@avada/shopify-auth';
+import path from 'path';
+import render from 'koa-ejs';
+import shopifyConfig from '@functions/config/shopify';
+import {syncNotifications} from '@functions/services/notificationService';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
@@ -43,12 +50,74 @@ app.use(
     },
     hostName: appConfig.baseUrl,
     isEmbeddedApp: true,
+    afterInstall: async ctx => {
+      try {
+        const shopifyDomain = ctx.state.shopify.shop;
+        const shop = await getShopByShopifyDomain(shopifyDomain);
+
+        await Promise.all([
+          addSetting({shopDomain: shopifyDomain, shopId: shop.id, addInfo: defaultSettings}),
+          syncNotifications({
+            shopDomain: shopifyDomain,
+            accessToken: shop.accessToken,
+            shopId: shop.id
+          }),
+          registerWebhook(
+            {
+              shopName: shopifyDomain,
+              accessToken: shop.accessToken
+            },
+            {
+              address: `https://${appConfig.baseUrl}/webhook/order/new`,
+              topic: 'orders/create',
+              format: 'json'
+            }
+          )
+        ]);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    afterLogin: async ctx => {
+      try {
+        const shopifyDomain = ctx.state.shopify.shop;
+        const shop = await getShopByShopifyDomain(shopifyDomain);
+
+        const webhooks = await getWebhooks({
+          shopName: shopifyDomain,
+          accessToken: shop.accessToken
+        });
+
+        const webhooksToDelete = webhooks
+          .filter(webhook => !webhook.address.includes(appConfig.baseUrl))
+          .map(webhook => webhook.id);
+
+        if (webhooks.length === webhooksToDelete.length) {
+          await registerWebhook(
+            {shopName: shopifyDomain, accessToken: shop.accessToken},
+            {
+              address: `https://${appConfig.baseUrl}/webhook/order/new`,
+              topic: 'orders/create',
+              format: 'json'
+            }
+          );
+        }
+
+        await deleteWebhooks(
+          {shopName: shopifyDomain, accessToken: shop.accessToken},
+          webhooksToDelete
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
     afterThemePublish: ctx => {
       // Publish assets when theme is published or changed here
       return (ctx.body = {
         success: true
       });
     }
+    // afterLogin: () => {}
   }).routes()
 );
 
