@@ -1,9 +1,9 @@
+import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
+import React from 'react';
+import {delay} from '../helpers/delay';
 import {insertAfter} from '../helpers/insertHelpers';
 import {render} from 'preact';
-import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
-import {delay} from '../helpers/delay';
 import {replaceSubstring} from '../helpers/replaceSubstring';
-import React from 'react';
 
 export default class DisplayManager {
   constructor() {
@@ -71,17 +71,10 @@ export default class DisplayManager {
     this.fadeOut();
     this.deleteContainer();
 
-    for (let i = 1; i < settings.maxPopsDisplay; i++) {
-      this.insertContainer();
-      await delay(settings.popsInterval);
-      await this.display({
-        notification: notifications[i],
-        position: settings.position,
-        truncateProductName: settings.truncateProductName
-      });
-      await delay(settings.displayDuration);
-      this.fadeOut();
-      this.deleteContainer();
+    for (let i = 0; i < settings.maxPopsDisplay; i++) {
+      // or i < notifications.length
+      const currentNotification = notifications[i % notifications.length];
+      await this.displayNotification(currentNotification, settings);
     }
   }
 
@@ -99,5 +92,18 @@ export default class DisplayManager {
     if (settings.allowShow === 'specific' && includedUrls.includes(currentUrl)) return true;
 
     return settings.allowShow === 'all';
+  }
+
+  async displayNotification(currentNotification, settings) {
+    this.insertContainer();
+    await delay(settings.popsInterval);
+    await this.display({
+      notification: currentNotification,
+      position: settings.position,
+      truncateProductName: settings.truncateProductName
+    });
+    await delay(settings.displayDuration);
+    this.fadeOut();
+    this.deleteContainer();
   }
 }

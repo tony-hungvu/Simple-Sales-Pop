@@ -25,3 +25,13 @@ export async function deleteWebhook({shopName, accessToken}, id) {
 export async function deleteWebhooks({shopName, accessToken}, ids) {
   return Promise.all(ids.map(id => deleteWebhook({shopName, accessToken}, id)));
 }
+
+export async function scriptTagCreate({shopName, accessToken}) {
+  const shopify = createShopifyInstance({shopName, accessToken});
+  return shopify.scriptTag.create({
+    script_tag: {
+      event: 'onload',
+      src: 'https://localhost:3000/scripttag/avada-sale-pop.min.js'
+    }
+  });
+}

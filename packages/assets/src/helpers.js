@@ -1,10 +1,10 @@
+import {Redirect} from '@shopify/app-bridge/actions';
+import {authenticatedFetch} from '@shopify/app-bridge-utils';
 import axios from 'axios';
 import createApp from '@shopify/app-bridge';
-import {authenticatedFetch} from '@shopify/app-bridge-utils';
-import {Redirect} from '@shopify/app-bridge/actions';
-import {initializeApp} from 'firebase/app';
-import {getAuth} from 'firebase/auth';
 import {getApiPrefix} from '@functions/const/app';
+import {getAuth} from 'firebase/auth';
+import {initializeApp} from 'firebase/app';
 import {isEmbeddedApp} from '@assets/config/app';
 
 const app = initializeApp({
