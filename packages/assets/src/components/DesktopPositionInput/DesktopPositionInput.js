@@ -1,7 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import './DesktopPositionInput.scss';
+
 import {Labelled, LegacyStack, Text} from '@shopify/polaris';
+
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const defaultOptions = [
   {label: 'Bottom left', value: 'bottom-left'},
@@ -23,7 +25,7 @@ const DesktopPositionInput = ({label, value, onChange, helpText, options = defau
             onClick={() => onChange(option.value)}
           >
             <div
-              className={`Avada-DesktopPosition__Input Avada-DesktopPosition__Input--center`}
+              className={`Avada-DesktopPosition__Input Avada-DesktopPosition__Input--${option.value}`}
             ></div>
           </div>
         ))}

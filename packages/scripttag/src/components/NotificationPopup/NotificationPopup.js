@@ -1,19 +1,20 @@
-import React from 'react';
 import './NoticationPopup.scss';
 
+import React from 'react';
+
 const NotificationPopup = ({
-  firstName = 'John Doe',
-  city = 'New York',
-  country = 'United States',
-  productName = 'Puffer Jacket With Hidden Hoodafsdfasdfsadfdsfsadfasdfsdafasdfsadfasdfasdfsadfsadfsadfsadfsadfsadfwqerqwegfasdfsdafasd',
-  relativeDate = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg',
-  position = 'top-left',
-  truncateProductName = false,
-  hideTimeAgo = false
+  firstName,
+  city,
+  country,
+  productName,
+  relativeDate,
+  productImage,
+  position,
+  truncateProductName,
+  hideTimeAgo
 }) => {
   return (
-    <div className={`Avava-SP__Wrapper fadeInUp animated Avava-SP__Wrapper--center`}>
+    <div className={`Avava-SP__Wrapper fadeInUp animated Avava-SP__Wrapper--${position}`}>
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
           <a href="#" className={'Avava-SP__LinkWrapper'}>

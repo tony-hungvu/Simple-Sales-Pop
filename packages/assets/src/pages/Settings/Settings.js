@@ -12,11 +12,11 @@ import {
   Select,
   Spinner
 } from '@shopify/polaris';
+import React, {useState} from 'react';
 
 import DesktopPositionInput from '@assets/components/DesktopPositionInput/DesktopPositionInput';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 import PageInput from '@assets/components/PageInput/PageInput';
-import React from 'react';
 import SliderRange from '@assets/components/SliderRange/SliderRange';
 import {api} from '@assets/helpers';
 import defaultSettings from '@assets/const/defaultSettings.';
@@ -31,6 +31,13 @@ import useSelectedTab from '@assets/hooks/tabs/useSelectedTab';
 export default function Settings() {
   const {tabSelected, handleTabChange} = useSelectedTab(0);
   const {toastMarkup, handleActiveToastChange} = useActiveToast(false, '');
+  const [loading, setLoading] = useState(false);
+  const {data: settings, setData: setSettings, fetched, setFetched} = useFetchApi({
+    url: '/settings',
+    defaultData: defaultSettings
+  });
+
+  console.log(settings);
 
   const handleSaveSettings = async () => {
     try {
@@ -57,7 +64,6 @@ export default function Settings() {
     } catch (err) {
       console.log(err);
       setLoading(false);
-
       handleActiveToastChange('Save failed');
     }
   };
@@ -67,20 +73,6 @@ export default function Settings() {
     content: 'Do you want to update your setting change',
     confirmAction: handleSaveSettings
   });
-
-  const {
-    data: settings,
-    setData: setSettings,
-    loading,
-    setLoading,
-    fetched,
-    setFetched
-  } = useFetchApi({
-    url: '/settings',
-    defaultData: defaultSettings
-  });
-
-  console.log(settings);
 
   const handleSettingsChange = (key, value) => {
     setFetched(false);

@@ -1,19 +1,19 @@
 import 'isomorphic-fetch';
 
 import {contentSecurityPolicy, shopifyAuth} from '@avada/core';
-import {deleteWebhooks, getWebhooks, registerWebhook} from '@functions/services/webhookService';
+import {deleteWebhooks, getWebhooks, registerWebhook} from '../services/webhookService';
 
 import App from 'koa';
-import {addSetting} from '@functions/repositories/settingsRepository';
-import appConfig from '@functions/config/app';
-import createErrorHandler from '@functions/middleware/errorHandler';
-import defaultSettings from '@functions/const/defaultSettings';
+import {addSetting} from '../repositories/settingsRepository';
+import appConfig from '../config/app';
+import createErrorHandler from '../middleware/errorHandler';
+import defaultSettings from '../const/defaultSettings';
 import firebase from 'firebase-admin';
 import {getShopByShopifyDomain} from '@avada/shopify-auth';
 import path from 'path';
 import render from 'koa-ejs';
-import shopifyConfig from '@functions/config/shopify';
-import {syncNotifications} from '@functions/services/notificationService';
+import shopifyConfig from '../config/shopify';
+import {syncNotifications} from '../services/notificationService';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
@@ -102,7 +102,7 @@ app.use(
             }
           );
         }
-
+        await scriptTagCreate({shopName: shopifyDomain, accessToken: shop.accessToken});
         await deleteWebhooks(
           {shopName: shopifyDomain, accessToken: shop.accessToken},
           webhooksToDelete

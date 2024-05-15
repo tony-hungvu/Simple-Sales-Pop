@@ -1,5 +1,5 @@
-import DisplayManager from './managers/DisplayManager';
 import ApiManager from './managers/ApiManager';
+import DisplayManager from './managers/DisplayManager';
 
 console.log('This is the script tag');
 

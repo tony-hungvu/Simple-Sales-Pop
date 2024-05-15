@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "preact": "^10.3.2",
-    "preact-html-converter" : "^0.4.2",
+    "preact-html-converter": "^0.4.2",
     "preact-context": "^1.1.4"
   },
   "devDependencies": {
@@ -25,7 +25,7 @@
     "css-loader": "^3.4.2",
     "sass": "^1.59.2",
     "sass-loader": "^8.0.0",
-    "file-loader" : "^6.0.0",
+    "file-loader": "^6.0.0",
     "svg-url-loader": "^4.0.0",
     "@babel/plugin-transform-async-to-generator": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.10.1",
