@@ -7,14 +7,19 @@ const NotificationPopup = ({
   city,
   country,
   productName,
-  relativeDate,
+  relativeDate = 'a day ago',
   productImage,
   position,
   truncateProductName,
   hideTimeAgo
 }) => {
+  const wrapperClass = `Avava-SP__Wrapper fadeInUp animated Avava-SP__Wrapper--${position}`;
+  const subtitleClass = truncateProductName
+    ? 'Avada-SP__Subtitle text-elipsis'
+    : 'Avada-SP__Subtitle';
+  const timeAgo = hideTimeAgo ? 'Avada-SP__Footer--hide' : '';
   return (
-    <div className={`Avava-SP__Wrapper fadeInUp animated Avava-SP__Wrapper--${position}`}>
+    <div className={wrapperClass}>
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
           <a href="#" className={'Avava-SP__LinkWrapper'}>
@@ -28,15 +33,9 @@ const NotificationPopup = ({
               <div className={'Avada-SP__Title'}>
                 {firstName} in {city}, {country}
               </div>
-              <div
-                className={
-                  truncateProductName ? 'Avada-SP__Subtitle text-elipsis' : 'Avada-SP__Subtitle'
-                }
-              >
-                purchased {productName}
-              </div>
+              <div className={subtitleClass}>purchased {productName}</div>
               <div className={'Avada-SP__Footer'}>
-                <span className={hideTimeAgo ? 'Avada-SP__Footer--hide' : ''}>{relativeDate} </span>
+                <span className={timeAgo}>{relativeDate} </span>
                 <span className="uni-blue">
                   <i className="fa fa-check" aria-hidden="true" /> by Avada
                 </span>

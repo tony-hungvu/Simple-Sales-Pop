@@ -14,15 +14,15 @@ const collection = firestore.collection('COLLECTION_NAME');
  * @param {string} id
  * @returns {Object}
  */
-export async function getSampleRepoById(id) {
+export const getSampleRepoById = async (id) => {
   try {
     const doc = await collection.doc(id).get();
     if (!doc.exists) {
       return null;
     }
-    return {id: doc.id, ...doc.data()};
-  } catch (e) {
-    console.error(e);
+    return { id: doc.id, ...doc.data() };
+  } catch (error) {
+    console.error(error);
     return null;
   }
-}
+};

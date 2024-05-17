@@ -7,7 +7,7 @@ import {getShopById} from '@functions/repositories/shopRepository';
  * @param {Context|Object|*} ctx
  * @returns {Promise<void>}
  */
-export async function getSubscription(ctx) {
+export const getSubscription = async ctx => {
   const shop = await getShopById(getCurrentShop(ctx));
   ctx.body = {shop};
-}
+};

@@ -1,9 +1,10 @@
+import './SliderRange.scss';
+
 import {RangeSlider, Text} from '@shopify/polaris';
+
 import React from 'react';
 
-export default function SliderRange({
-  label, min, max, helpText, rangeValue, handleRangeSliderChange, unit
-}) {
+const SliderRange = ({label, min, max, helpText, rangeValue, handleRangeSliderChange, unit}) => {
   return (
     <RangeSlider
       output
@@ -14,18 +15,8 @@ export default function SliderRange({
       value={rangeValue}
       onChange={handleRangeSliderChange}
       suffix={
-        <div
-          style={{
-            minWidth: '32px',
-            border: '1px solid gray',
-            borderRadius: '4px 8px',
-            padding: '4px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-        >
-          <span style={{marginRight: '8px'}}>{rangeValue}</span>
+        <div className="SliderRange__suffix">
+          <span className="SliderRange__value">{rangeValue}</span>
           <Text variant="bodyXs" as="span">
             {unit}(s)
           </Text>
@@ -33,4 +24,6 @@ export default function SliderRange({
       }
     />
   );
-}
+};
+
+export default SliderRange;

@@ -73,6 +73,7 @@ app.use(
               format: 'json'
             }
           )
+          // scriptTagCreate({shopName: shopifyDomain, accessToken: shop.accessToken})
         ]);
       } catch (err) {
         console.log(err);
@@ -102,7 +103,6 @@ app.use(
             }
           );
         }
-        await scriptTagCreate({shopName: shopifyDomain, accessToken: shop.accessToken});
         await deleteWebhooks(
           {shopName: shopifyDomain, accessToken: shop.accessToken},
           webhooksToDelete

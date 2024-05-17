@@ -10,7 +10,7 @@ const collection = firestore.collection('shops');
  * @param id
  * @returns {Promise<{Shop}>}
  */
-export async function getShopById(id) {
+export const getShopById = async id => {
   const doc = await collection.doc(id).get();
   return presentDataAndFormatDate(doc, presentShop);
-}
+};

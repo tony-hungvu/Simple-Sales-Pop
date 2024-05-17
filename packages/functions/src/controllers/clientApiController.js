@@ -1,27 +1,26 @@
-import {getSettingByShopDomain} from '@functions/repositories/settingsRepository';
 import {getListNotificationsByShopDomain} from '@functions/repositories/notificationsRepository';
+import {getSettingByShopDomain} from '@functions/repositories/settingsRepository';
 
-export async function get(ctx) {
+export const get = async ctx => {
   try {
     const {shopDomain} = ctx.query;
-
     const [setting, notifications] = await Promise.all([
       getSettingByShopDomain(shopDomain),
       getListNotificationsByShopDomain(shopDomain)
     ]);
 
-    return (ctx.body = {
+    ctx.body = {
       data: {
         setting,
         notifications
       }
-    });
+    };
   } catch (err) {
+    console.error(err);
     ctx.status = 404;
-    console.log(err);
-    return (ctx.body = {
+    ctx.body = {
       data: {},
       success: false
-    });
+    };
   }
-}
+};

@@ -5,7 +5,10 @@ const firestore = new Firestore();
 
 const notificationsRef = firestore.collection('notifications');
 
-export async function getListNotifications(shopId, {before, after, limit, sort, searchKey, page}) {
+export const getListNotifications = async (
+  shopId,
+  {before, after, limit, sort, searchKey, page}
+) => {
   let query = notificationsRef;
 
   const searchField = Object.keys(searchKey)[0];
@@ -30,7 +33,6 @@ export async function getListNotifications(shopId, {before, after, limit, sort, 
   }
 
   const snapshot = await query.get();
-
   const data = snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
@@ -44,9 +46,9 @@ export async function getListNotifications(shopId, {before, after, limit, sort, 
       totalPage: totalCount
     }
   };
-}
+};
 
-export async function getListNotificationsByShopDomain(shopDomain) {
+export const getListNotificationsByShopDomain = async shopDomain => {
   const snapshot = await notificationsRef
     .where('shopDomain', '==', shopDomain)
     .orderBy('timestamp', 'desc')
@@ -60,9 +62,9 @@ export async function getListNotificationsByShopDomain(shopDomain) {
     id: doc.id,
     ...doc.data()
   }));
-}
+};
 
-export async function getNotificationByOrderId(orderId) {
+export const getNotificationByOrderId = async orderId => {
   const snapshot = await notificationsRef.where('orderId', '==', orderId).get();
 
   if (snapshot.empty) {
@@ -73,28 +75,29 @@ export async function getNotificationByOrderId(orderId) {
     id: doc.id,
     ...doc.data()
   }));
-}
+};
 
-export async function createNotification(notification) {
+export const createNotification = async notification => {
   return await notificationsRef.add({...notification});
-}
+};
 
-export async function createNotifications(notArr) {
+export const createNotifications = async notArr => {
   return Promise.all(
     notArr.map(async not => {
       return createNotification(not);
     })
   );
-}
+};
 
-export async function deleteNotification(id) {
-  return await notificationsRef.doc(id).delete();
-}
+export const deleted = async id => {
+  const snapshot = await notificationsRef.doc(id).delete();
+  return snapshot;
+};
 
-export async function deleteNotifications(ids) {
+export const deleteNotifications = async ids => {
   return Promise.all(
     ids.map(async id => {
       return deleteNotification(id);
     })
   );
-}
+};

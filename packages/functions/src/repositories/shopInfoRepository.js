@@ -11,7 +11,7 @@ const shopInfosRef = firestore.collection('shopInfos');
  * @param {string} id
  * @return {Promise<FirebaseFirestore.DocumentData>}
  */
-export async function getShopInfoByShopId(id) {
+export const getShopInfoByShopId = async id => {
   const docs = await shopInfosRef
     .where('shopId', '==', id)
     .limit(1)
@@ -21,4 +21,4 @@ export async function getShopInfoByShopId(id) {
   }
   const [doc] = docs.docs;
   return presentDataAndFormatDate(doc);
-}
+};
