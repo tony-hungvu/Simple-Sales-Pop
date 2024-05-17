@@ -4,7 +4,7 @@ const firestore = new Firestore();
 
 const settingsRef = firestore.collection('settings');
 
-export async function getSetting(shopId) {
+export const getSetting = async shopId => {
   const snapshot = await settingsRef
     .where('shopId', '==', shopId)
     .limit(1)
@@ -18,9 +18,9 @@ export async function getSetting(shopId) {
     id: doc.id,
     ...doc.data()
   }))[0];
-}
+};
 
-export async function getSettingByShopDomain(shopDomain) {
+export const getSettingByShopDomain = async shopDomain => {
   const snapshot = await settingsRef
     .where('shopDomain', '==', shopDomain)
     .limit(1)
@@ -34,15 +34,15 @@ export async function getSettingByShopDomain(shopDomain) {
     id: doc.id,
     ...doc.data()
   }))[0];
-}
+};
 
-export async function updateSetting(shopId, updateInfo) {
+export const updateSetting = async (shopId, updateInfo) => {
   const settingsDoc = await getSetting(shopId);
   await settingsRef.doc(settingsDoc.id).update({...updateInfo});
 
   return await getSetting(shopId);
-}
+};
 
-export async function addSetting({shopDomain, shopId, addInfo}) {
+export const addSetting = ({shopDomain, shopId, addInfo}) => {
   return settingsRef.add({shopDomain, shopId, ...addInfo});
-}
+};

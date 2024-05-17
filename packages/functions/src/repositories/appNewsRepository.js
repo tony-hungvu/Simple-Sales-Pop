@@ -8,20 +8,20 @@ const BASE_URL = 'https://blog-admin.avada.io/articles';
  * @param query
  * @returns {Promise<{data: any[], hasNext: boolean, hasPre: boolean, error}>}
  */
-export async function getAppNewsList(query) {
+export const getAppNewsList = async query => {
   try {
     const {searchKey, categories} = query;
     const where = [categories && {categories}, searchKey && {title_contains: searchKey}].filter(
       Boolean
     );
     return await paginateStrapi({...query, where});
-  } catch (e) {
-    console.error(e);
-    return {data: [], count: 0, hasPre: false, hasNext: true, error: e.message};
+  } catch (error) {
+    console.error(error);
+    return {data: [], count: 0, hasPre: false, hasNext: true, error: error.message};
   }
-}
+};
 
-async function paginateStrapi({
+const paginateStrapi = async ({
   where = [],
   sort = '',
   limit = 20,
@@ -30,7 +30,7 @@ async function paginateStrapi({
   before = null,
   after = null,
   countTotal = false
-}) {
+}) => {
   const $limit = parseInt(limit + '');
   const params = cleanEmptyField({
     _where: where.length > 0 && where,
@@ -53,4 +53,4 @@ async function paginateStrapi({
     hasPre: page > 1,
     hasNext: data.length > $limit
   };
-}
+};

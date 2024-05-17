@@ -1,5 +1,6 @@
-import {handleError} from '@assets/services/errorService';
 import {api, auth} from '@assets/helpers';
+
+import {handleError} from '@assets/services/errorService';
 
 export const storeTypes = {
   SET_USER: 'SET_USER',
@@ -29,19 +30,19 @@ export const reducer = (state, {type, payload}) => {
   }
 };
 
-export function setLoading(dispatch, payload = true) {
+export const setLoading = (dispatch, payload = true) => {
   dispatch(storeTypes.SET_LOADING, payload);
-}
+};
 
-export function setToast(dispatch, content, error = false) {
+export const setToast = (dispatch, content, error = false) => {
   dispatch(storeTypes.SET_TOAST, {content, error});
-}
+};
 
-export function closeToast(dispatch) {
+export const closeToast = dispatch => {
   dispatch(storeTypes.CLOSE_TOAST);
-}
+};
 
-export async function logout(dispatch) {
+export const logout = async dispatch => {
   try {
     setLoading(dispatch, true);
     await auth.signOut();
@@ -51,13 +52,13 @@ export async function logout(dispatch) {
     setLoading(dispatch, false);
     setToast(dispatch, e.message, true);
   }
-}
+};
 
-export function setSubscription(dispatch, payload = null) {
+export const setSubscription = (dispatch, payload = null) => {
   dispatch(storeTypes.SET_SUBSCRIPTION, payload);
-}
+};
 
-export async function getSubscription(dispatch) {
+export const getSubscription = async dispatch => {
   try {
     setLoading(dispatch, true);
     const payload = await api('/subscription');
@@ -67,4 +68,4 @@ export async function getSubscription(dispatch) {
     handleError(e);
     setLoading(dispatch, false);
   }
-}
+};

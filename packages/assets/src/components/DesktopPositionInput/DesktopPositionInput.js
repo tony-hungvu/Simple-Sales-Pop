@@ -13,23 +13,23 @@ const defaultOptions = [
 ];
 
 const DesktopPositionInput = ({label, value, onChange, helpText, options = defaultOptions}) => {
+  options = options || defaultOptions;
+  const optionElements = options.map((option, index) => (
+    <div
+      key={index}
+      className={`Avada-DesktopPosition ${
+        value === option.value ? 'Avada-DesktopPosition--selected' : ''
+      }`}
+      onClick={() => onChange(option.value)}
+    >
+      <div
+        className={`Avada-DesktopPosition__Input Avada-DesktopPosition__Input--${option.value}`}
+      />
+    </div>
+  ));
   return (
     <Labelled label={label}>
-      <LegacyStack>
-        {options.map((option, key) => (
-          <div
-            key={key}
-            className={`Avada-DesktopPosition ${
-              value === option.value ? 'Avada-DesktopPosition--selected' : ''
-            }`}
-            onClick={() => onChange(option.value)}
-          >
-            <div
-              className={`Avada-DesktopPosition__Input Avada-DesktopPosition__Input--${option.value}`}
-            ></div>
-          </div>
-        ))}
-      </LegacyStack>
+      <LegacyStack>{optionElements}</LegacyStack>
       <Text variant="bodyLg" as="p" tone={'subdued'}>
         {helpText}
       </Text>

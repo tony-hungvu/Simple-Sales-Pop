@@ -62,21 +62,19 @@ export default class DisplayManager {
 
   async displayFromSetting(settings, notifications) {
     await delay(settings.firstDelay);
-    await this.display({
-      notification: notifications[0],
-      position: settings.position,
-      truncateProductName: settings.truncateProductName
-    });
-    await delay(settings.displayDuration);
-    this.fadeOut();
-    this.deleteContainer();
+    const toDisplayNotications = notifications.slice(0, settings.maxPopsDisplay);
 
-    for (let i = 0; i < settings.maxPopsDisplay; i++) {
-      // or i < notifications.length
-      const currentNotification = notifications[i % notifications.length];
-      await this.displayNotification(currentNotification, settings);
+    for (const notifcation of toDisplayNotications) {
+      await this.displayNotification(notifcation, settings);
+      await delay(settings.displayDuration);
+      this.fadeOut();
+      await delay(settings.popsInterval);
     }
   }
+
+  // getPopsToDisplay() {
+  //   return this.notifications.randonmize()
+  // }
 
   filterPageUrls(urls) {
     const urlsArr = urls.split('\n');

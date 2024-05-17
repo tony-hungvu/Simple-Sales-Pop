@@ -1,22 +1,27 @@
 import './NoticationPopup.scss';
 import '@shopify/polaris/build/esm/styles.css';
 
-import {Icon, Text, TextContainer, Tooltip} from '@shopify/polaris';
+import {CheckIcon, XIcon} from '@shopify/polaris-icons';
+import {Icon, TextContainer, Tooltip} from '@shopify/polaris';
 
-import {CheckIcon} from '@shopify/polaris-icons';
 import React from 'react';
 import timestampToDate from '@assets/helpers/utils/timestampToDate';
+
 const NotificationPopup = ({
   firstName,
   city,
   productName,
   country,
-  productId,
   timestamp,
   productImage,
-  time
+  time,
+  onDeleteNotification,
+  id
 }) => {
-  const date = timestampToDate(timestamp);
+  const formattedDate = timestampToDate(timestamp);
+  const handleDelete = () => {
+    onDeleteNotification(id);
+  };
 
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
@@ -47,12 +52,19 @@ const NotificationPopup = ({
           </a>
           <div className="close-btn">
             <Tooltip content="Delete notification">
-              <TextContainer>x</TextContainer>
+              <TextContainer>
+                <Icon
+                  source={XIcon}
+                  color="critical"
+                  accessibilityLabel="Delete"
+                  onClick={handleDelete}
+                />
+              </TextContainer>
             </Tooltip>
           </div>
         </div>
       </div>
-      <div>{date !== 'Invalid Date' ? date : ''}</div>
+      <div>{formattedDate !== 'Invalid Date' ? formattedDate : ''}</div>
     </div>
   );
 };

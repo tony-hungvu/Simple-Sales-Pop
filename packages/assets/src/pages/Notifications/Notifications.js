@@ -1,13 +1,12 @@
-import {Card, Layout, Page, ResourceItem, ResourceList} from '@shopify/polaris';
-import React, {useState} from 'react';
-import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 import './Notifications.css';
-import timestampToRelativeTime from '@assets/helpers/utils/timestampToRelativeTime';
+
+import {Card, Layout, Page, ResourceList} from '@shopify/polaris';
+import React, {useState} from 'react';
+
 import Empty from '@assets/components/Empty/Empty';
-import usePaginate from '@assets/hooks/api/usePaginate';
+import renderItem from './RenderItem';
 import useFilter from '@assets/hooks/form/useFilter';
-import debounce from '@assets/helpers/debounce';
-import titleCaseToCamelCase from '@assets/helpers/utils/titleCaseToCamelCase';
+import usePaginate from '@assets/hooks/api/usePaginate';
 
 export default function Notifications() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -104,25 +103,5 @@ export default function Notifications() {
         </Layout>
       </Page>
     </div>
-  );
-}
-
-function renderItem(item) {
-  const {firstName, city, productName, country, timestamp, productImage, id} = item;
-  const time = timestampToRelativeTime(timestamp);
-
-  return (
-    <ResourceItem id={id}>
-      <NotificationPopup
-        id={id}
-        firstName={firstName}
-        city={city}
-        productName={productName}
-        country={country}
-        timestamp={timestamp}
-        productImage={productImage}
-        time={time}
-      />
-    </ResourceItem>
   );
 }

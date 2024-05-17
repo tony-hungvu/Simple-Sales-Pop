@@ -1,10 +1,13 @@
 import {
+  deleted,
+  getById,
   getListNotifications,
   getListNotificationsByShopDomain
 } from '@functions/repositories/notificationsRepository';
+
 import {getCurrentShop} from '@functions/helpers/auth';
 
-export async function getList(ctx) {
+export const getList = async ctx => {
   try {
     const shopId = getCurrentShop(ctx);
     const {limit, sort, page, before, after, ...searchKey} = ctx.query;
@@ -18,36 +21,55 @@ export async function getList(ctx) {
       page
     });
 
-    return (ctx.body = {
+    ctx.body = {
       data: notificationsData.data,
       count: notificationsData.count,
       pageInfo: notificationsData.pageInfo,
       success: true
-    });
+    };
   } catch (err) {
     ctx.status = 400;
     console.log(err);
-    return (ctx.body = {
+    ctx.body = {
       data: {},
       success: false
-    });
+    };
   }
-}
+};
 
-export async function getNotificationsByShopDomain(ctx) {
+export const getNotificationsByShopDomain = async ctx => {
   try {
     const {shopDomain} = ctx.query;
     const notifications = await getListNotificationsByShopDomain(shopDomain);
 
-    return (ctx.body = {
+    ctx.body = {
       data: notifications
-    });
+    };
   } catch (err) {
     ctx.status = 400;
     console.log(err);
-    return (ctx.body = {
+    ctx.body = {
       data: {},
       success: false
-    });
+    };
   }
-}
+};
+
+export const deletedNotification = async ctx => {
+  const {id} = ctx.params;
+  try {
+    const notification = await deleted(id);
+    ctx.status = 200;
+    ctx.body = {
+      success: true,
+      message: 'Notification deleted successfully',
+      notification
+    };
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = {
+      success: false,
+      error: error.message
+    };
+  }
+};

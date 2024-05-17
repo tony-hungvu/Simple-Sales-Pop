@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
+
 import {api} from '@assets/helpers';
-import queryString from 'query-string';
 import {handleError} from '@assets/services/errorService';
+import queryString from 'query-string';
 
 /**
  * useFetchApi hook for fetch data from api with url

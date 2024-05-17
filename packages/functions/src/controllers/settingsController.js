@@ -1,28 +1,28 @@
 import {getSetting, updateSetting} from '@functions/repositories/settingsRepository';
+
 import {getCurrentShop} from '@functions/helpers/auth';
 
-export async function get(ctx) {
+export const get = async ctx => {
   try {
-    // const shopDomain = ctx.state.user.shopifyDomain;
     const shopId = getCurrentShop(ctx);
     const setting = await getSetting(shopId);
 
     ctx.status = 200;
-    return (ctx.body = {
+    ctx.body = {
       data: setting,
       success: true
-    });
+    };
   } catch (err) {
     ctx.status = 404;
     console.log(err);
-    return (ctx.body = {
+    ctx.body = {
       data: {},
       success: false
-    });
+    };
   }
-}
+};
 
-export async function update(ctx) {
+export const update = async ctx => {
   try {
     const shopDomain = ctx.state.user.shopifyDomain;
     const shopId = getCurrentShop(ctx);
@@ -31,16 +31,16 @@ export async function update(ctx) {
     const res = await updateSetting(shopDomain, shopId, data);
 
     ctx.status = 200;
-    return (ctx.body = {
+    ctx.body = {
       success: true,
       data: res
-    });
+    };
   } catch (err) {
     ctx.status = 400;
     console.log(err);
-    return (ctx.body = {
+    ctx.body = {
       data: {},
       success: false
-    });
+    };
   }
-}
+};
