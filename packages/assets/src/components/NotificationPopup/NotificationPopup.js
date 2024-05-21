@@ -4,6 +4,7 @@ import '@shopify/polaris/build/esm/styles.css';
 import {CheckIcon, XIcon} from '@shopify/polaris-icons';
 import {Icon, TextContainer, Tooltip} from '@shopify/polaris';
 
+import PropTypes from 'prop-types';
 import React from 'react';
 import timestampToDate from '@assets/helpers/utils/timestampToDate';
 
@@ -50,15 +51,10 @@ const NotificationPopup = ({
               </div>
             </div>
           </a>
-          <div className="close-btn">
+          <div className="close-btn" onClick={handleDelete}>
             <Tooltip content="Delete notification">
               <TextContainer>
-                <Icon
-                  source={XIcon}
-                  color="critical"
-                  accessibilityLabel="Delete"
-                  onClick={handleDelete}
-                />
+                <Icon source={XIcon} color="critical" accessibilityLabel="Delete" />
               </TextContainer>
             </Tooltip>
           </div>
@@ -69,6 +65,9 @@ const NotificationPopup = ({
   );
 };
 
-NotificationPopup.propTypes = {};
+NotificationPopup.propTypes = {
+  onDeleteNotification: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired
+};
 
 export default NotificationPopup;
